@@ -1,7 +1,7 @@
 import {useState, useEffect, type ReactNode} from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase.ts";
 import type { Session } from "@supabase/supabase-js";
-import {AuthContext} from "./AuthContext";
+import {AuthContext} from "./AuthContext.ts";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);

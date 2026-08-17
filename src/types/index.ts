@@ -1,6 +1,8 @@
 import type { Database } from "./database.types.ts";
 import type {Session} from "@supabase/supabase-js";
 
+export type Theme = "dark" | "light" | "system"
+
 export type LegoSet = Database['public']['Tables']['sets']['Row'];
 
 export type ScanState =
