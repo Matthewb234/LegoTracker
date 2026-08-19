@@ -41,7 +41,7 @@ export function LoginForm({
     return (
         <div className={cn("flex flex-col", className)} {...props}>
             <Card>
-                <div className="flex flex-col items-center gap-2 text-center">
+                <div className="items-center gap-2 text-center">
                     <h1 className="text-2xl font-bold">Welcome Back</h1>
                     <p className="text-balance text-muted-foreground">
                         Enter your email and password below to access your account
@@ -50,7 +50,7 @@ export function LoginForm({
                 <CardContent>
                     <form id="login-form" onSubmit={(e) => submitForm(e)}>
                         <FieldGroup>
-                            <Field className="grid gap-2" data-invalid={error != ""}>
+                            <Field data-invalid={error != ""}>
                                 <FieldLabel htmlFor="email">Email</FieldLabel>
                                 <Input
                                     id="email"
@@ -62,7 +62,7 @@ export function LoginForm({
                                     required
                                 />
                             </Field>
-                            <Field className="grid gap-2" data-invalid={error != ""}>
+                            <Field data-invalid={error != ""}>
                                 <div className="flex items-center">
                                     <FieldLabel htmlFor="password">Password</FieldLabel>
                                     <Button

@@ -5,10 +5,9 @@ export type Theme = "dark" | "light" | "system"
 
 export type LegoSet = Database['public']['Tables']['sets']['Row'];
 
-export type ScanState =
+export type SearchState =
     {status: 'idle'}
     | {status: 'looking_up'; setNum: string}
-    | {status: 'confirming'; set: LegoSet}
     | {status: 'error'; message: string};
 
 // type SetSearchResponse = { data :  } | { error : string}
