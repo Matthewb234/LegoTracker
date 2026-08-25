@@ -40,7 +40,7 @@ export function RegisterForm({
 
     return (
         <div className={cn("flex flex-col", className)} {...props}>
-            <Card>
+            <Card className="rounded-xl">
                 <div className="flex flex-col items-center gap-2 text-center">
                     <h1 className="text-2xl font-bold">Welcome Back</h1>
                     <p className="text-balance text-muted-foreground">

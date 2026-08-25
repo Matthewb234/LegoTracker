@@ -1,29 +1,45 @@
-import { Button } from "@/components/ui/button"
-import {supabase} from "@/lib/supabase.ts";
-import {useAuth} from "@/providers/auth/AuthContext.ts";
-import {ThemeToggle} from "@/components/ThemeToggle.tsx";
-import {SearchBar} from "@/features/search/SearchBar.tsx";
+import {SearchBar} from "@/components/SearchBar.tsx";
 import {useState} from "react";
 import type {LegoSet} from "@/types";
-import {ResultSetDialog} from "@/features/search/ResultSetDialog.tsx";
+import {SetViewDialog} from "@/components/SetViewDialog.tsx";
+import {CustomTrigger} from "@/features/sidebar/CustomTrigger.tsx";
+import {useAuth} from "@/providers/auth/AuthContext.ts";
+import {useNavigate} from "react-router";
+import {Button} from "@/components/ui/button.tsx";
+import {collectionInsert} from "@/lib/api.ts";
 
 export function HomePage() {
-    const authContext = useAuth();
     const [legoSet, setLegoSet] = useState<LegoSet|null>(null);
+    const { session } = useAuth()
+    const navigate = useNavigate();
 
-    const logOut = async () => {
-        const error = await supabase.auth.signOut();
-        if (error) throw error;
+    const addToCollection = async (set: LegoSet) => {
+        try {
+            const { data, error } = await collectionInsert(set.id);
+            if (error) {
+                console.error(error)
+            } else if (data) {
+                console.log(data)
+                setLegoSet(null);
+            }
+        } finally {
+            console.log("Added")
+        }
     }
 
     return (
         <>
-            <SearchBar onResult={setLegoSet}></SearchBar>
-            <ThemeToggle></ThemeToggle>
-            <Button onClick={logOut} disabled={authContext.loading || authContext.session == null}>
-                Log Out
-            </Button>
-            {legoSet && <ResultSetDialog set={legoSet} close={() => setLegoSet(null)}></ResultSetDialog>}
+            <div className="flex flex-row items-center gap-2">
+                {session
+                    ? <CustomTrigger />
+                    : <Button onClick={() => navigate("/login")}>Log In</Button>}
+                <SearchBar onResult={setLegoSet} className="w-full" />
+            </div>
+            {legoSet && <SetViewDialog set={legoSet} close={() => setLegoSet(null)}>
+              <div className="text-center rounded-b-xl bg-muted/50 -m-4 p-4">
+                <Button className="w-full" onClick={() => addToCollection(legoSet)}>Add To Collection</Button>
+              </div>
+            </SetViewDialog>}
         </>
     )
 }

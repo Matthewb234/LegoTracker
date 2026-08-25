@@ -9,5 +9,6 @@ export function FeatureGuard() {
     } else if (session == null) {
         return <Navigate to="/login" replace />;
     }
+
     return <Outlet />
 }

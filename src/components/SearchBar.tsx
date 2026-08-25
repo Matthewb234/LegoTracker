@@ -38,7 +38,7 @@ export function SearchBar({
     return (
         <div className={cn("flex flex-col", className)}>
             <form onSubmit={searchSet}>
-                <InputGroup className="max-w-xl group" aria-invalid={state.status === 'error'}>
+                <InputGroup className="group" aria-invalid={state.status === 'error'}>
                     <InputGroupInput className="group-aria-invalid:placeholder:text-destructive"
                         value={setNum}
                         placeholder={"Search Sets..."}

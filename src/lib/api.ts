@@ -7,3 +7,11 @@ export function lookupSet(setNum: string) {
 export function collectionInsert(setNum: string) {
     return supabase.functions.invoke('collection-insert', {body: { setNum }});
 }
+
+export async function getProfile(userId: string) {
+    return await supabase.from('profiles').select('*').eq('id', userId).single();
+}
+
+export function getMyCollection() {
+    return supabase.from('collection_items').select('*, sets(*)').order('added_at', {ascending: false});
+}

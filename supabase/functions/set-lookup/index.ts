@@ -8,16 +8,16 @@ export default {
   fetch: withSupabase<Database>({ auth: ["user"] }, async (req, ctx) => {
     try {
       const { setNum } = await req.json();
-      if (!setNum) return Response.json({ error: 'setNum is required' }, { status: 400 })
-
-      const { data, error } = await ctx.supabase.from('sets').select('*').eq('id', setNum).maybeSingle();
+      if (!setNum) return Response.json({ error: 'setNum is required' }, { status: 400 });
+      const normalizedSetNum = String(setNum).includes('-') ? String(setNum) : `${setNum}-1`;
+      const { data, error } = await ctx.supabase.from('sets').select('*').eq('id', normalizedSetNum).maybeSingle();
       if (error) {
         throw error
       }
       
       if (!data) {
         const set = await fetch(
-          `https://rebrickable.com/api/v3/lego/sets/${setNum}/`, {
+          `https://rebrickable.com/api/v3/lego/sets/${normalizedSetNum}/`, {
           headers: {
             Authorization: `key ${Deno.env.get('REBRICKABLE_KEY')}`
           }
@@ -45,7 +45,7 @@ export default {
         )
         const { data: insertedData, error: insertError} = await supabaseAdmin.from('sets').upsert(
         {
-          id: setNum,
+          id: normalizedSetNum,
           name: setData['name'],
           theme: themeData['name'],
           piece_count: setData['num_parts'],
@@ -54,7 +54,7 @@ export default {
         },
         {
           onConflict: 'id'
-        }).select('*');
+        }).select('*').single();
         if (insertError) {
           throw insertError
         }
