@@ -7,6 +7,7 @@ import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {useNavigate} from "react-router";
 import {Button} from "@/components/ui/button.tsx";
 import {collectionInsert} from "@/lib/api.ts";
+import {toast} from "@/components/ui/toast.tsx";
 
 export function HomePage() {
     const [legoSet, setLegoSet] = useState<LegoSet|null>(null);
@@ -14,16 +15,20 @@ export function HomePage() {
     const navigate = useNavigate();
 
     const addToCollection = async (set: LegoSet) => {
+        let toastType = ""
+        let toastDescription = ""
         try {
             const { data, error } = await collectionInsert(set.id);
             if (error) {
-                console.error(error)
+                toastType = "error";
+                toastDescription = "Failed to add set to collection";
             } else if (data) {
-                console.log(data)
+                toastType = "success";
+                toastDescription = "Successfully added set to collection";
                 setLegoSet(null);
             }
         } finally {
-            console.log("Added")
+            toast.add({type: toastType, description: toastDescription});
         }
     }
 

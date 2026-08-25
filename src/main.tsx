@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import {AuthProvider} from "./providers/auth/AuthProvider.tsx";
 import {ThemeProvider} from "@/providers/theme/ThemeProvider.tsx";
+import {Toaster} from "@/components/ui/toast.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
           <BrowserRouter>
               <ThemeProvider>
                   <App />
+                  <Toaster />
               </ThemeProvider>
           </BrowserRouter>
       </AuthProvider>
