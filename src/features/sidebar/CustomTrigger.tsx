@@ -3,9 +3,9 @@ import { Separator } from "@/components/ui/separator"
 
 export function CustomTrigger() {
     return (
-        <>
-            <SidebarTrigger className="md:hidden" />
-            <Separator orientation="vertical" className="h-6 md:hidden" />
-        </>
+        <div className="flex flex-row justify-center md:hidden">
+            <SidebarTrigger />
+            <Separator orientation="vertical" className="h-10" />
+        </div>
     )
 }

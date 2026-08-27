@@ -61,7 +61,7 @@ export function CollectionPage() {
             <div className="flex flex-col">
                 <div className="flex flex-row items-center gap-2">
                     <CustomTrigger />
-                    <SearchBar onResult={(data: LegoSet) => {
+                    <SearchBar hintText="Search Your Collection..." onResult={(data: LegoSet) => {
                         const existing = items.find((item) => item.set_id === data.id);
                         setViewing({ set: data, quantity: existing?.quantity ?? undefined });
                     }} className="w-full" />

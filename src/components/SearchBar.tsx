@@ -8,10 +8,12 @@ import type {LegoSet, SearchState} from "@/types";
 
 type SearchBarProps = React.ComponentProps<"div"> & {
     onResult: (set: LegoSet) => void;
+    hintText: string;
 };
 
 export function SearchBar({
     onResult,
+    hintText,
     className
 }: SearchBarProps) {
     const [setNum, setSetNum] = useState<string>("");
@@ -27,7 +29,6 @@ export function SearchBar({
                 console.error(error)
             } else if (data) {
                 onResult(data.data)
-                console.log(data)
                 setState({status: 'idle'});
             }
         } finally {
@@ -41,7 +42,7 @@ export function SearchBar({
                 <InputGroup className="group" aria-invalid={state.status === 'error'}>
                     <InputGroupInput className="group-aria-invalid:placeholder:text-destructive"
                         value={setNum}
-                        placeholder={"Search Sets..."}
+                        placeholder={hintText}
                         onInput={() => setState({status: 'idle'})}
                         onChange={(e) => setSetNum(e.target.value)}
                         disabled={state.status == 'looking_up'}

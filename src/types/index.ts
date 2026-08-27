@@ -13,8 +13,7 @@ export type CollectionItem = NonNullable<Awaited<ReturnType<typeof getMyCollecti
 export type SearchState =
     {status: 'idle'}
     | {status: 'looking_up'; setNum: string}
+    | {status: 'viewing'; set: LegoSet}
     | {status: 'error'; message: string};
-
-// type SetSearchResponse = { data :  } | { error : string}
 
 export type AuthContextValue = {session: Session | null, profile: Profile | null, loading: boolean};

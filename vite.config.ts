@@ -27,7 +27,12 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    allowedHosts: [
+      'negotiation-falls-speech-casinos.trycloudflare.com'
+    ]
+  },
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
+    alias: { "@": path.resolve(__dirname, "./src") }
   },
 })
