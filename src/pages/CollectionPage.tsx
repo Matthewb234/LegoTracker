@@ -3,11 +3,10 @@ import {SearchBar} from "@/components/SearchBar.tsx";
 import {SetViewDialog} from "@/components/SetViewDialog.tsx";
 import {useEffect, useState} from "react";
 import type {CollectionItem, LegoSet} from "@/types";
-import {getMyCollection} from "@/lib/api.ts";
+import {collectionDecrement, getCollection} from "@/lib/api.ts";
 import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {CollectionCard, CollectionCardSkeleton} from "@/features/collection/CollectionCard.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {supabase} from "@/lib/supabase.ts";
 import {toast} from "@/components/ui/toast.tsx";
 
 type Viewing = { set: LegoSet; quantity?: number };
@@ -23,7 +22,7 @@ export function CollectionPage() {
         let toastType = ""
         let toastDescription = ""
         try {
-            const { data, error } = await supabase.rpc('decrement_in_collection', {p_set_id: set.id});
+            const { data, error } = await collectionDecrement(set.id);
             if (error) {
                 toastType = "error";
                 toastDescription = "Failed to remove set from collection";
@@ -45,7 +44,7 @@ export function CollectionPage() {
     useEffect(() => {
         const fetchItems = async ()=> {
             setLoading(true);
-            const {data, error} = await getMyCollection();
+            const {data, error} = await getCollection(session?.user.id ?? '');
             if (error) {
                 console.error(error);
                 setLoading(false);

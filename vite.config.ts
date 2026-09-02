@@ -29,7 +29,7 @@ export default defineConfig({
   ],
   server: {
     allowedHosts: [
-      'negotiation-falls-speech-casinos.trycloudflare.com'
+      'micro-acts-join-relating.trycloudflare.com'
     ]
   },
   resolve: {
