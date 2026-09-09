@@ -271,7 +271,26 @@ export function DebugPanel() {
 
   const ua = navigator.userAgent;
 
+  // Seconds since this page was mounted. If a report shows a large number,
+  // it was copied from a tab that has been sitting open and the values are
+  // stale — ask for a fresh load instead of trusting it.
+  const [ageSeconds, setAgeSeconds] = useState(0);
+  useEffect(() => {
+    const mounted = Date.now();
+    const t = setInterval(
+        () => setAgeSeconds(Math.round((Date.now() - mounted) / 1000)),
+        1000
+    );
+    return () => clearInterval(t);
+  }, []);
+
   const rows: Array<[string, string, 'good' | 'bad' | 'neutral']> = [
+    ['Report generated', new Date().toISOString(), 'neutral'],
+    [
+      'Page age (seconds)',
+      String(ageSeconds),
+      ageSeconds > 120 ? 'bad' : 'good',
+    ],
     ['Build', buildTime, 'neutral'],
     ['Bundle', bundleScript, 'neutral'],
     ['Browser', browserName(ua), 'neutral'],
