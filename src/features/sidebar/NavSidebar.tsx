@@ -2,7 +2,6 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -12,6 +11,7 @@ import {NavUser} from "@/components/NavUser.tsx";
 import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {useLocation, useNavigate} from "react-router";
 import {useEffect} from "react";
+import {Home, SquareLibrary, Users} from "lucide-react";
 
 export function NavSidebar() {
     const location = useLocation();
@@ -25,15 +25,24 @@ export function NavSidebar() {
 
     return (
         <Sidebar variant="floating">
-            <SidebarHeader />
             <SidebarContent>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={() => {navigate("/")}}>
-                            Home Page
+                            <Home />
+                            <span>Home</span>
                         </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
                         <SidebarMenuButton onClick={() => {navigate("/collection")}}>
-                            Collection Page
+                            <SquareLibrary />
+                            <span>Collection Page</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton onClick={() => {navigate("/connections")}}>
+                            <Users />
+                            <span>Friends</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

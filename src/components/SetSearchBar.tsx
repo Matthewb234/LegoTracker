@@ -6,16 +6,16 @@ import {lookupSet} from "@/lib/api.ts";
 import {Spinner} from "@/components/ui/spinner.tsx";
 import type {LegoSet, SearchState} from "@/types";
 
-type SearchBarProps = React.ComponentProps<"div"> & {
+type SetSearchBarProps = React.ComponentProps<"div"> & {
     onResult: (set: LegoSet) => void;
     hintText: string;
 };
 
-export function SearchBar({
+export function SetSearchBar({
     onResult,
     hintText,
     className
-}: SearchBarProps) {
+}: SetSearchBarProps) {
     const [setNum, setSetNum] = useState<string>("");
     const [state, setState] = useState<SearchState>({status: 'idle'});
 

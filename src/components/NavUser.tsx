@@ -1,6 +1,6 @@
 import {
     ChevronsUpDown,
-    LogOut,
+    LogOut, User, UserRoundPen,
 } from "lucide-react"
 
 import {
@@ -25,10 +25,13 @@ import {
 } from "@/components/ui/sidebar"
 import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {supabase} from "@/lib/supabase.ts";
+import {ThemeToggle} from "@/components/ThemeToggle.tsx";
+import {useNavigate} from "react-router";
 
 export function NavUser() {
     const { isMobile } = useSidebar()
     const { session, profile } = useAuth();
+    const navigate = useNavigate();
     const user = session?.user;
 
     const logOut = async () => {
@@ -49,7 +52,9 @@ export function NavUser() {
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
                                 <AvatarImage src={profile?.avatar_url ?? ''} alt={profile?.display_name ?? 'user'}/>
-                                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                <AvatarFallback>
+                                    <User className="w-full h-full stroke-muted-foreground" />
+                                </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate font-medium">{profile?.display_name ?? 'user'}</span>
@@ -78,16 +83,19 @@ export function NavUser() {
                                 </div>
                             </DropdownMenuLabel>
                         </DropdownMenuGroup>
-                        {/*<DropdownMenuSeparator/>*/}
-                        {/*<DropdownMenuGroup>*/}
-                        {/*</DropdownMenuGroup>*/}
-                        {/*<DropdownMenuSeparator/>*/}
-                        {/*<DropdownMenuGroup>*/}
-                        {/*</DropdownMenuGroup>*/}
+                        <DropdownMenuSeparator/>
+                        <DropdownMenuItem onClick={() => navigate("/edit-profile")}>
+                            <UserRoundPen />
+                            <span>Edit Profile</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator/>
+                        <DropdownMenuItem>
+                            <ThemeToggle></ThemeToggle>
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem onClick={logOut}>
                             <LogOut/>
-                            Log out
+                            <span>Log Out</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

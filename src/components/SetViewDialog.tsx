@@ -13,7 +13,7 @@ interface SetViewDialogProps {
     set: LegoSet;
     quantity?: number;
     close: () => void;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export function SetViewDialog({ set, quantity, close, children } : SetViewDialogProps) {

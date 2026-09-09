@@ -27,6 +27,14 @@ export function sendConnectionRequest(targetId:string) {
     return supabase.rpc('send_connection_request', { p_target_id: targetId });
 }
 
+export function searchProfiles(search: string, limit = 5, exact = false) {
+    return supabase.rpc('search_profiles', {
+        p_search: search,
+        p_limit: limit,
+        p_exact: exact
+    });
+}
+
 //---------------------------------TABLE PROCESSES-----------------------------------
 export function getProfile(userId: string) {
     return supabase.from('profiles').select('*').eq('id', userId).single();
@@ -55,7 +63,7 @@ export function acceptConnectionRequest(connectionId:string) {
 }
 
 export function deleteConnection(connectionId:string) {
-    return supabase.from('connections').delete().eq('id', connectionId);
+    return supabase.from('connections').delete().eq('id', connectionId).select('*');
 }
 
 export function favoriteConnection(userId:string, connectionId:string) {

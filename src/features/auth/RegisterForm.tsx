@@ -13,7 +13,7 @@ import {useState} from "react";
 import {supabase} from "@/lib/supabase.ts";
 import {InputGroup, InputGroupAddon, InputGroupInput} from "@/components/ui/input-group.tsx";
 import {Spinner} from "@/components/ui/spinner.tsx";
-import {useUsernameAvailability} from "@/features/auth/UsernameAvailability.ts";
+import {useUsernameAvailability} from "@/features/auth/useUsernameAvailability.ts";
 import {Check, X} from "lucide-react";
 import {isUsernameAvailable} from "@/lib/api.ts";
 

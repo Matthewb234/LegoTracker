@@ -9,7 +9,11 @@ export function SidebarLayout() {
     if (loading)  {
         return null
     } else if (session == null) {
-        return <Outlet />
+        return (
+            <div className="flex min-h-svh w-full flex-col p-2">
+                <Outlet />
+            </div>
+        );
     }
 
     return (
