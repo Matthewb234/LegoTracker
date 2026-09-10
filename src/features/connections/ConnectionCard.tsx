@@ -3,6 +3,7 @@ import type {Connection, ConnectionType} from "@/types";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
 import {Minus, Star, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
+import {getAvatarUrlFromUrl} from "@/lib/api.ts";
 
 type ConnectionCardProps = { connection: Connection }
     & {type: ConnectionType}
@@ -19,7 +20,11 @@ export function ConnectionCard({ connection, type, onButtonClick, onRemove, onFa
                     <Minus className="-mt-1 stroke-3  hover:stroke-red-500 hover:stroke-4" onClick={onRemove}/>
                     <div className="rounded-full outline-2 w-full h-full aspect-square outline-muted-foreground">
                         {connection.friend_avatar_url
-                            ? <img className="w-full aspect-square object-cover shrink-0" src={connection.friend_avatar_url ?? ''} alt="user avatar"/>
+                            ? <img
+                                className="rounded-full w-full aspect-square object-cover shrink-0"
+                                src={getAvatarUrlFromUrl(connection.friend_avatar_url, connection.created_at!)}
+                                alt="user avatar"
+                            />
                             : <User className="w-full h-full stroke-muted-foreground p-2" />
                         }
                     </div>

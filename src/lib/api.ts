@@ -1,9 +1,5 @@
 import {supabase} from "./supabase";
-
-function escapeLikePattern(input: string) {
-    // \ must be escaped first, or it would double-escape the ones added after
-    return input.replace(/[\\%_]/g, '\\$&');
-}
+import type {Profile} from "@/types";
 
 //---------------------------------Function CALLS-----------------------------------
 export function lookupSet(setNum: string) {
@@ -40,22 +36,38 @@ export function getProfile(userId: string) {
     return supabase.from('profiles').select('*').eq('id', userId).single();
 }
 
+export function updateDisplayName(userId: string, displayName: string) {
+    return supabase.from('profiles').update({ display_name: displayName }).eq('id', userId).select('*');
+}
+
+export async function updateAvatar(userId: string, avatar: Blob) {
+    const path = `${userId}/avatar.jpg`
+    const { error } = await supabase.storage.from('avatars').upload(path, avatar, {
+        upsert: true,
+        contentType: avatar.type,
+    })
+
+    if (error) {
+        return {error: error};
+    }
+    return await supabase.from('profiles').update({ avatar_url: path }).eq('id', userId)
+}
+
+export function getAvatarUrl(profile: Profile) {
+    const { data } = supabase.storage.from('avatars').getPublicUrl(profile?.avatar_url ?? '')
+    return `${data.publicUrl}?v=${profile.updated_at}`
+}
+
+export function getAvatarUrlFromUrl(url: string, timeStamp: string) {
+    const { data } = supabase.storage.from('avatars').getPublicUrl(url)
+    return `${data.publicUrl}?v=${timeStamp}`
+}
+
 export function getCollection(userId: string) {
     return supabase.from('collection_items')
         .select('*, sets(*)')
         .order('added_at', {ascending: false})
         .eq('user_id', userId);
-}
-
-export function getProfiles(userId: string, targetUsername: string, limit: number) {
-    const term = targetUsername.trim();
-    if (term === "") return null;
-
-    return supabase.from('profiles').select('*')
-        .ilike('display_name', `%${escapeLikePattern(term)}%`)
-        .neq('id', userId)
-        .order('display_name')
-        .limit(limit);
 }
 
 export function acceptConnectionRequest(connectionId:string) {

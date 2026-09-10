@@ -57,7 +57,7 @@ export function ConnectionsPage() {
                         </EmptyDescription>
                     </Empty>
                 </div>
-                : <div className="grid pt-4 gap-4 grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                : <div className="grid pt-4 gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {loading
                         ? Array.from({ length: 10 }).map((_, i) => <ConnectionCardSkeleton key={i} />)
                         : connections.map((item) => (

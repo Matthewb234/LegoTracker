@@ -11,11 +11,9 @@ import { Input } from "@/components/ui/input"
 import {Link, useNavigate} from "react-router";
 import {useState} from "react";
 import {supabase} from "@/lib/supabase.ts";
-import {InputGroup, InputGroupAddon, InputGroupInput} from "@/components/ui/input-group.tsx";
-import {Spinner} from "@/components/ui/spinner.tsx";
 import {useUsernameAvailability} from "@/features/auth/useUsernameAvailability.ts";
-import {Check, X} from "lucide-react";
 import {isUsernameAvailable} from "@/lib/api.ts";
+import {UsernameInput} from "@/components/UsernameInput.tsx";
 
 export function RegisterForm({
     className,
@@ -29,34 +27,40 @@ export function RegisterForm({
     const [error, setError] = useState<string>("")
 
     const navigate = useNavigate()
-
     const nameState = useUsernameAvailability(username)
-    const nameInvalid = nameState.status === 'invalid' || nameState.status === 'taken'
 
-    const submitForm = async (e: React.SubmitEvent<HTMLFormElement>)=> {
+    const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setError("");
+        setUsernameError("");
+
+        const trimmed = username.trim();
+
+        if (nameState.status === 'checking') {
+            setUsernameError("Still checking that username…")
+            return
+        }
+        if (nameState.status !== 'available') {
+            setUsernameError(
+                nameState.status === 'invalid'
+                    ? nameState.message
+                    : nameState.status === 'taken'
+                        ? "That username is taken"
+                        : "Please choose a username"
+            )
+            return
+        }
+
+        setSubmitting(true);
         try {
-            e.preventDefault()
-            setSubmitting(true)
-            setError("")
-
-            if (nameState.status === 'taken') {
-                setUsernameError("That username is taken")
-                return
-            } else if (nameState.status === 'invalid') {
-                setUsernameError(nameState.message)
-                return
-            }
-
             const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    data: { display_name: username }
-                }
+                email,
+                password,
+                options: { data: { display_name: trimmed } }
             })
 
             if (error) {
-                const { data: stillFree } = await isUsernameAvailable(username)
+                const { data: stillFree } = await isUsernameAvailable(trimmed)
                 if (stillFree === false) {
                     setUsernameError("That username was just taken")
                 } else {
@@ -64,8 +68,13 @@ export function RegisterForm({
                 }
                 console.error(error)
                 setPassword("")
-            } else if (data) navigate("/")
-        } finally {
+                setSubmitting(false)
+            } else if (data) {
+                navigate("/")
+            }
+        } catch (err) {
+            console.error(err)
+            setError("Something went wrong. Please try again.")
             setSubmitting(false)
         }
     }
@@ -82,36 +91,13 @@ export function RegisterForm({
                 <CardContent>
                     <form id="register-form" onSubmit={(e) => submitForm(e)}>
                         <FieldGroup>
-                            <Field className="grid gap-2" data-invalid={nameInvalid || usernameError != ""}>
-                                <FieldLabel htmlFor="username">Username</FieldLabel>
-                                <InputGroup>
-                                    <InputGroupInput
-                                        id="username"
-                                        type="text"
-                                        placeholder="Letters, nums, _ and - only. 3–30 chars"
-                                        autoComplete="off"
-                                        value={username}
-                                        onChange={(e) => {
-                                            setUsername(e.target.value.trim())
-                                            setUsernameError("")
-                                        }}
-                                        aria-invalid={nameInvalid || usernameError != ""}
-                                        required
-                                    />
-                                    <InputGroupAddon align="inline-end">
-                                        {nameState.status === 'checking' && <Spinner />}
-                                        {nameState.status === 'available' && <Check className="size-4 text-green-600" />}
-                                        {nameState.status === 'invalid' || nameState.status === 'taken' && <X className="size-4 text-red-400" />}
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                <FieldDescription>
-                                    {
-                                        usernameError
-                                        || (nameState.status === 'invalid' && nameState.message)
-                                        || (nameState.status === 'taken' && "That username is taken")
-                                    }
-                                </FieldDescription>
-                            </Field>
+                            <UsernameInput
+                                value={username}
+                                onChange={(v) => { setUsername(v); setUsernameError("") }}
+                                state={nameState}
+                                error={usernameError}
+                                disabled={submitting}
+                            />
                             <Field className="grid gap-2" data-invalid={error != ""}>
                                 <FieldLabel htmlFor="email">Email</FieldLabel>
                                 <Input
