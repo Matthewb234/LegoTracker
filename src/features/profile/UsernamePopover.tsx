@@ -7,6 +7,7 @@ import {UsernameInput} from "@/components/UsernameInput.tsx";
 import type {Profile} from "@/types";
 import {isUsernameAvailable, updateDisplayName} from "@/lib/api.ts";
 import {toast} from "@/components/ui/toast.tsx";
+import {useAuth} from "@/providers/auth/AuthContext.ts";
 
 type UsernamePopoverProps = {profile: Profile} & {refresh: () => void}
 
@@ -18,6 +19,7 @@ export function UsernamePopover({profile, refresh}: UsernamePopoverProps) {
     const [open, setOpen] = useState(false)
 
     const nameState = useUsernameAvailability(username)
+    const {session} = useAuth()
 
     const unchanged = username === originalUsername;
     const canSubmit = unchanged ? false : nameState.status === 'available';
@@ -51,7 +53,7 @@ export function UsernamePopover({profile, refresh}: UsernamePopoverProps) {
             const { data, error } = await updateDisplayName(profile.id, trimmed);
 
             if (error) {
-                const { data: stillFree } = await isUsernameAvailable(trimmed)
+                const { data: stillFree } = await isUsernameAvailable(trimmed, session?.user.id)
                 if (stillFree === false) {
                     setUsernameError("That username was just taken")
                 }else {

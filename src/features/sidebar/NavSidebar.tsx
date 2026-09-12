@@ -1,7 +1,8 @@
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
+    SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -9,13 +10,18 @@ import {
 } from "@/components/ui/sidebar.tsx";
 import {NavUser} from "@/components/NavUser.tsx";
 import {useAuth} from "@/providers/auth/AuthContext.ts";
-import {useLocation, useNavigate} from "react-router";
+import {Link, useLocation} from "react-router";
 import {useEffect} from "react";
-import {Home, SquareLibrary, Users} from "lucide-react";
+import {Blocks, Home, SquareLibrary, Users} from "lucide-react";
+
+const NAV_ITEMS = [
+    { title: "Home", url: "/", icon: Home },
+    { title: "Collection", url: "/collection", icon: SquareLibrary },
+    { title: "Friends", url: "/connections", icon: Users },
+];
 
 export function NavSidebar() {
     const location = useLocation();
-    const navigate = useNavigate();
     const {session} = useAuth();
     const {setOpenMobile} = useSidebar();
 
@@ -24,30 +30,60 @@ export function NavSidebar() {
     }, [location.pathname, setOpenMobile]);
 
     return (
-        <Sidebar variant="floating">
+        <Sidebar variant="inset">
+            <SidebarHeader>
+                <div className="flex items-center gap-2 px-2 py-1.5">
+                    <div className="bg-primary text-primary-foreground
+                    flex size-8 items-center justify-center rounded-md">
+                        <Blocks className="size-4" />
+                    </div>
+                    <span className="font-semibold tracking-tight">Lego Tracker</span>
+                </div>
+            </SidebarHeader>
             <SidebarContent>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => {navigate("/")}}>
-                            <Home />
-                            <span>Home</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => {navigate("/collection")}}>
-                            <SquareLibrary />
-                            <span>Collection Page</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton onClick={() => {navigate("/connections")}}>
-                            <Users />
-                            <span>Friends</span>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Browse</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu className="gap-1.5">
+                            {NAV_ITEMS.map((item) => {
+                                const isActive =
+                                    item.url === "/"
+                                        ? location.pathname === "/"
+                                        : location.pathname.startsWith(item.url);
+
+                                return (
+                                    <SidebarMenuItem key={item.url}>
+                                        <SidebarMenuButton
+                                            className="relative h-11 gap-3 rounded-lg px-3 [&_svg]:size-5
+                                               data-active:before:absolute
+                                               data-active:before:left-0
+                                               data-active:before:top-1/2
+                                               data-active:before:h-2/3
+                                               data-active:before:w-1
+                                               data-active:before:-translate-y-1/2
+                                               data-active:before:rounded-r-full
+                                               data-active:before:bg-primary"
+                                            isActive={isActive}
+                                            render={<Link to={item.url} />}
+                                            tooltip={item.title}
+                                        >
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                );
+                            })}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
+                <div className="bg-sidebar-accent/60 rounded-lg px-3 py-2.5">
+                <p className="text-sidebar-foreground/60 text-xs font-medium">Your collection</p>
+                <p className="text-lg font-semibold tabular-nums">
+                    {100} <span className="text-sidebar-foreground/50 text-sm font-normal">sets</span>
+                </p>
+            </div>
                 {session?.user && <NavUser />}
             </SidebarFooter>
         </Sidebar>

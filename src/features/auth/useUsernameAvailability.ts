@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import type {UsernameState} from "@/types";
 import {isUsernameAvailable} from "@/lib/api.ts";
+import {useAuth} from "@/providers/auth/AuthContext.ts";
 
 const ALLOWED_CHARS = /^[A-Za-z0-9_-]*$/;
 
@@ -8,6 +9,8 @@ export type ValidationResult = { valid: true } | { valid: false; message: string
 
 export function useUsernameAvailability(username: string) {
     const [usernameState, setUsernameState] = useState<UsernameState>({status: "idle"})
+
+    const {session} = useAuth()
 
     useEffect(() => {
         let ignore = false;
@@ -27,7 +30,7 @@ export function useUsernameAvailability(username: string) {
             setUsernameState({ status: 'checking' });
 
             timer = setTimeout(async () => {
-                const { data, error } = await isUsernameAvailable(username);
+                const { data, error } = await isUsernameAvailable(username, session?.user.id);
                 if (ignore) return;
                 if (error) {
                     console.error(error);

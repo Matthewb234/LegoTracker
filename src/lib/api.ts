@@ -15,8 +15,8 @@ export function collectionDecrement(setNum: string) {
     return supabase.rpc('decrement_in_collection', {p_set_id: setNum})
 }
 
-export function isUsernameAvailable(username: string) {
-    return supabase.rpc('is_display_name_available', { p_name: username });
+export function isUsernameAvailable(username: string, excludedId?: string) {
+    return supabase.rpc('is_display_name_available', { p_name: username, p_exclude: excludedId });
 }
 
 export function sendConnectionRequest(targetId:string) {
@@ -100,4 +100,19 @@ export function getConnections(
         ? query.order('favorited', { ascending: false })
             .order('friend_display_name')
         : query.order('created_at', { ascending: false });
+}
+
+//---------------------------------TABLE PROCESSES-----------------------------------
+
+export async function signInWithGoogle() {
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+        },
+    });
+
+    if (error) {
+        throw new Error("Couldn't start Google sign-in. Please try again.");
+    }
 }

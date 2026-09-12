@@ -1,0 +1,1 @@
+grant select on table public.allowed_emails to supabase_auth_admin;

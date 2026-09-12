@@ -4,16 +4,9 @@ import {
 } from "lucide-react"
 
 import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from "@/components/ui/avatar"
-import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -25,7 +18,6 @@ import {
 } from "@/components/ui/sidebar"
 import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {supabase} from "@/lib/supabase.ts";
-import {ThemeToggle} from "@/components/ThemeToggle.tsx";
 import {useNavigate} from "react-router";
 import {getAvatarUrl} from "@/lib/api.ts";
 import {useProfile} from "@/providers/profile/ProfileContext.ts";
@@ -53,10 +45,10 @@ export function NavUser() {
                             size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
-                            <div className="size-8 rounded-full outline-2 outline-primary">
+                            <div className="size-8 rounded-full grid place-items-center outline-2 outline-primary">
                                 {profile?.avatar_url
                                     ? <img className="rounded-full w-full aspect-square shrink-0" src={getAvatarUrl(profile)} alt="user avatar"/>
-                                    : <User className="w-full h-full stroke-muted-foreground p-2" />
+                                    : <User className="size-7/8! stroke-muted-foreground" />
                                 }
                             </div>
                             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -72,28 +64,9 @@ export function NavUser() {
                         align="end"
                         sideOffset={4}
                     >
-                        <DropdownMenuGroup>
-                            <DropdownMenuLabel className="p-0 font-normal">
-                                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                    <Avatar className="h-8 w-8 rounded-lg">
-                                        <AvatarImage src={profile?.avatar_url ?? ''} alt={profile?.display_name}/>
-                                        <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                                    </Avatar>
-                                    <div className="grid flex-1 text-left text-sm leading-tight">
-                                        <span className="truncate font-medium">{profile?.display_name}</span>
-                                        <span className="truncate text-xs">{user?.email}</span>
-                                    </div>
-                                </div>
-                            </DropdownMenuLabel>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator/>
                         <DropdownMenuItem onClick={() => navigate("/edit-profile")}>
                             <UserRoundPen />
                             <span>Edit Profile</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem>
-                            <ThemeToggle></ThemeToggle>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem onClick={logOut}>

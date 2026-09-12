@@ -1,4 +1,4 @@
-import {User} from "lucide-react";
+import {Pencil, User} from "lucide-react";
 import {useRef, useState} from "react";
 import type {Profile} from "@/types";
 import {Button} from "@base-ui/react";
@@ -76,7 +76,7 @@ export function AvatarSelector({profile, refresh}: AvatarSelectorProps) {
                 : <Button
                     type="button"
                     disabled={submitting}
-                    className="relative rounded-full outline-4 w-1/3 aspect-square bg-secondary outline-muted-foreground hover:outline-primary overflow-hidden p-0"
+                    className="relative rounded-full outline-4 w-1/3 aspect-square bg-secondary outline-muted-foreground hover:outline-primary p-0"
                     onClick={() => inputRef.current?.click()}
                     aria-label={profile?.avatar_url ? "Change profile picture" : "Add profile picture"}
                 >
@@ -84,6 +84,9 @@ export function AvatarSelector({profile, refresh}: AvatarSelectorProps) {
                         ? <img className="rounded-full w-full aspect-square shrink-0" src={preview ?? getAvatarUrl(profile)} alt="user avatar"/>
                         : <User className="w-full h-full stroke-muted-foreground p-2" />
                     }
+                    <div className="absolute bottom-1/15 right-1/15 rounded-full bg-primary outline-2 outline-muted-foreground size-1/6 grid place-items-center">
+                        <Pencil className="size-2/3"/>
+                    </div>
                 </Button>
             }
         </>

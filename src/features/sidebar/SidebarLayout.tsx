@@ -17,9 +17,15 @@ export function SidebarLayout() {
     }
 
     return (
-        <SidebarProvider open={true} onOpenChange={() => {}}>
+        <SidebarProvider
+            style={{
+                "--sidebar-width": "15rem",
+                "--sidebar-width-icon": "3.25rem",
+            } as React.CSSProperties}
+            open={true} onOpenChange={() => {}}
+        >
             <NavSidebar />
-            <SidebarInset className="p-2">
+            <SidebarInset className="p-4">
                 <Outlet />
             </SidebarInset>
         </SidebarProvider>

@@ -11,6 +11,7 @@ import {ConnectionsPage} from "@/pages/ConnectionsPage.tsx";
 import {FriendCollectionPage} from "@/pages/FriendCollectionPage.tsx";
 import {ProfilePage} from "@/pages/ProfilePage.tsx";
 import {DebugPanel} from "@/features/pwa/DebugPanel.tsx";
+import AuthCallback from "@/pages/AuthCallbackPage.tsx";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/debug" element={<DebugPanel />} />
         <Route element={<SidebarLayout />}>
           <Route index element={<HomePage />} />

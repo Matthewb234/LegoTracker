@@ -23,6 +23,7 @@ export function UsernameInput({
     error = "",
     disabled = false
 }: UsernameInputProps) {
+
     const invalid = error !== "" || state.status === 'invalid' || state.status === 'taken'
 
     const message =
