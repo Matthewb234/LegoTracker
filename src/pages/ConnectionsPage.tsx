@@ -57,25 +57,27 @@ export function ConnectionsPage() {
                         </EmptyDescription>
                     </Empty>
                 </div>
-                : <div className="grid pt-4 gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {loading
-                        ? Array.from({ length: 10 }).map((_, i) => <ConnectionCardSkeleton key={i} />)
-                        : connections.map((item) => (
-                            <ConnectionCard
-                                key={item.connection_id}
-                                connection={item}
-                                type={type}
-                                onButtonClick={ type.status === 'accepted'
-                                    ? () => {
-                                        navigate(`/collection/${item.friend_id}`);
+                : <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain -mx-4 -mb-4">
+                    <div className="grid p-4 gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                        {loading
+                            ? Array.from({ length: 10 }).map((_, i) => <ConnectionCardSkeleton key={i} />)
+                            : connections.map((item) => (
+                                <ConnectionCard
+                                    key={item.connection_id}
+                                    connection={item}
+                                    type={type}
+                                    onButtonClick={ type.status === 'accepted'
+                                        ? () => {
+                                            navigate(`/collection/${item.friend_id}`);
+                                        }
+                                        : () => accept(item)
                                     }
-                                    : () => accept(item)
-                                }
-                                onRemove={() => remove(item)}
-                                onFavorite={() => toggleFavorite(item)}
-                            />
-                        ))
-                    }
+                                    onRemove={() => remove(item)}
+                                    onFavorite={() => toggleFavorite(item)}
+                                />
+                            ))
+                        }
+                    </div>
                 </div>
             }
         </div>

@@ -13,6 +13,7 @@ import {useAuth} from "@/providers/auth/AuthContext.ts";
 import {Link, useLocation} from "react-router";
 import {useEffect} from "react";
 import {Blocks, Home, SquareLibrary, Users} from "lucide-react";
+import {useCollectionCount} from "@/features/collection/useCollectionCount.ts";
 
 const NAV_ITEMS = [
     { title: "Home", url: "/", icon: Home },
@@ -22,7 +23,8 @@ const NAV_ITEMS = [
 
 export function NavSidebar() {
     const location = useLocation();
-    const {session} = useAuth();
+    const { session } = useAuth();
+    const count = useCollectionCount(session?.user.id);
     const {setOpenMobile} = useSidebar();
 
     useEffect(() => {
@@ -80,9 +82,12 @@ export function NavSidebar() {
             <SidebarFooter>
                 <div className="bg-sidebar-accent/60 rounded-lg px-3 py-2.5">
                 <p className="text-sidebar-foreground/60 text-xs font-medium">Your collection</p>
-                <p className="text-lg font-semibold tabular-nums">
-                    {100} <span className="text-sidebar-foreground/50 text-sm font-normal">sets</span>
-                </p>
+                    <p className="text-lg font-semibold tabular-nums">
+                        {count ?? "—"}{" "}
+                        <span className="text-sidebar-foreground/50 text-sm font-normal">
+                            {count === 1 ? "set" : "sets"}
+                        </span>
+                    </p>
             </div>
                 {session?.user && <NavUser />}
             </SidebarFooter>

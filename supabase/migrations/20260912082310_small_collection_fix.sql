@@ -1,0 +1,1 @@
+alter table collection_items replica identity full;

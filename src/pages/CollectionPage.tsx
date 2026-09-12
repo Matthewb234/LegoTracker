@@ -58,16 +58,21 @@ export function CollectionPage() {
     return (
         <>
             <div className="flex flex-col flex-1 min-h-0">
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 shrink-0">
                     <CustomTrigger />
-                    <SetSearchBar hintText="Search Your Collection..." onResult={(data: LegoSet) => {
-                        const existing = items.find((item) => item.set_id === data.id);
-                        setViewing({ set: data, quantity: existing?.quantity ?? undefined });
-                    }} className="w-full" />
+                    <SetSearchBar
+                        hintText="Search Your Collection..."
+                        className="w-full"
+                        onResult={(data: LegoSet) => {
+                            const existing = items.find((item) => item.set_id === data.id);
+                            setViewing({ set: data, quantity: existing?.quantity ?? undefined });
+                        }}
+                    />
                 </div>
                 <CollectionGrid
                     items={items}
                     loading={loading}
+                    className="flex-1 min-h-0"
                     onSelect={(item) => setViewing({ set: item.sets, quantity: item.quantity ?? 1 })}
                 />
             </div>

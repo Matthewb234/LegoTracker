@@ -41,7 +41,7 @@ export function FriendCollectionPage() {
     return (
         <>
             <div className="flex flex-col flex-1 min-h-0">
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 shrink-0">
                     <CustomTrigger />
                     <p className="text-lg font-bold">
                         {profile ? `${profile.display_name}'s Collection` : "Collection"}
@@ -50,6 +50,7 @@ export function FriendCollectionPage() {
                 <CollectionGrid
                     items={items}
                     loading={loading}
+                    className="flex-1 min-h-0"
                     onSelect={(item) => setViewing({ set: item.sets, quantity: item.quantity ?? 1 })}
                 />
             </div>

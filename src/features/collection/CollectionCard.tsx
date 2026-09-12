@@ -10,7 +10,7 @@ export function CollectionCard({ item, onClick }: CollectionCardProps) {
             <CardContent className="flex flex-col gap-2 -m-2">
                 <img className="rounded-lg w-full aspect-4/3 object-contain shrink-0" src={item.sets.image_url ?? ''} alt="set image"/>
                 <p className="-mb-2 text-xl font-bold line-clamp-2 min-h-[2lh]">{item.sets.name}</p>
-                <p className="mt-auto">{"Qty: " + (item.quantity ?? 1)}</p>
+                <p className="mt-auto">{"Pcs: " + (item.sets.piece_count)}</p>
             </CardContent>
         </Card>
     )

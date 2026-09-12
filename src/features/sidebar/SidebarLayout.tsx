@@ -18,6 +18,7 @@ export function SidebarLayout() {
 
     return (
         <SidebarProvider
+            className="h-svh overflow-hidden"
             style={{
                 "--sidebar-width": "15rem",
                 "--sidebar-width-icon": "3.25rem",
@@ -25,7 +26,7 @@ export function SidebarLayout() {
             open={true} onOpenChange={() => {}}
         >
             <NavSidebar />
-            <SidebarInset className="p-4">
+            <SidebarInset className="min-h-0 overflow-hidden p-4">
                 <Outlet />
             </SidebarInset>
         </SidebarProvider>
